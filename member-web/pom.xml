@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	
+	<!-- 继承本项目的父工程 -->
+	<parent>
+		<groupId>cn.cebest</groupId>
+		<artifactId>member-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+
+	<!-- 基本信息 -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cn.cebest</groupId>
+	<artifactId>member-web</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>member-web</name>
+
+	<dependencies>
+		<!-- 加入common依赖 -->
+		<dependency>
+			<groupId>cn.cebest</groupId>
+			<artifactId>member-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- 加入service依赖 -->
+		<dependency>
+			<groupId>cn.cebest</groupId>
+			<artifactId>member-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- 加入dao依赖 -->
+		<dependency>
+			<groupId>cn.cebest</groupId>
+			<artifactId>member-dao</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+	</dependencies>
+	
+	
+	<build>
+		<finalName>member</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<maimClass>cn.cebest.Application</maimClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<!-- 基本信息 -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cn.cebest</groupId>
+	<artifactId>member-service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>member-service</name>
+
+	<!-- 继承本项目的父工程 -->
+	<parent>
+		<groupId>cn.cebest</groupId>
+		<artifactId>member-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+
+	<dependencies>
+		<!-- 加入common依赖 -->
+		<dependency>
+			<groupId>cn.cebest</groupId>
+			<artifactId>member-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- 加入dao依赖 -->
+		<dependency>
+			<groupId>cn.cebest</groupId>
+			<artifactId>member-dao</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	
+</project>

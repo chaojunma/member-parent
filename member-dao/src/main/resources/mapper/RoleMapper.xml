@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cebest.mapper.RoleMapper">
+	
+	<resultMap type="UserRole" id="roleResultMap">
+		<id column="id" property="id" />
+		<id column="roleCode" property="roleCode" />
+		<id column="description" property="description" />
+		<id column="isDelete" property="isDelete" />
+		<id column="createTime" property="createTime" />
+		<collection property="permissions" ofType="cn.cebest.entity.RolePermission">
+			<id column="permissionId" property="id" />
+			<result column="name" property="name" />
+			<result column="resourceType" property="resourceType" />
+			<result column="url" property="url" />
+			<result column="permission" property="permission" />
+			<result column="parentId" property="parentId" />
+		</collection>
+	</resultMap>
+	
+	<!-- 表基本字段 -->
+	<sql id="tableColumns">
+		r.id,
+		r.role_code roleCode,
+		r.description,
+		r.is_delete isDelete,
+		DATE_FORMAT(r.create_time,'%Y-%m-%d %H:%i:%s')createTime
+	</sql>
+	
+	<!-- 权限表字段 -->
+	<sql id="columns">
+		p.id,
+		p.name,
+		p.resource_type resourceType,
+		p.url,
+		p.permission,
+		p.parent_id parentId,
+		p.is_delete isDelete,
+		DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')createTime
+	</sql>
+	
+	
+	<!-- 分页查询 -->
+	<select id="pageList" parameterType="map" resultMap="roleResultMap">
+		SELECT 
+			<include refid="tableColumns" />
+			,p.id permissionId
+			,p.name
+			,p.resource_type resourceType
+			,p.url
+			,permission
+			,p.parent_id parentId
+			FROM user_role r
+			LEFT JOIN user_role_permission rp ON r.id = rp.role_id AND rp.is_delete = 0
+			LEFT JOIN user_permission p ON rp.permission_id = p.id AND p.is_delete = 0
+		WHERE r.is_delete = 0
+		<if test="key != null and key != ''">
+			AND (r.role_code like concat('%',#{key},'%')
+				OR
+				 r.description like concat('%',#{key},'%'))
+		</if>
+			ORDER BY r.create_time DESC
+	</select>
+	
+	
+	<!-- 角色对应权限列表 -->
+	<select id="permissions" parameterType="map" resultType="RolePermission">
+		SELECT
+			<include refid="columns" />
+			FROM user_role_permission rp
+			LEFT JOIN user_permission p ON rp.permission_id = p.id AND p.is_delete = 0
+		WHERE rp.role_id = #{roleId}
+			AND rp.is_delete = 0
+	</select>
+	
+	
+	<!-- 添加角色 -->
+	<insert id="synch" parameterType="UserRole" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+			user_role(
+				role_code,
+				description
+			) VALUES (
+				#{roleCode},
+				#{description}
+			)
+	</insert>
+	
+	
+	<!-- 删除角色 -->
+	<delete id="delete">
+		DELETE 
+			FROM user_role
+		WHERE id = #{id}
+	</delete>
+</mapper>

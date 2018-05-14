@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cebest.mapper.PermissionMapper">
+	
+	<resultMap type="RolePermission" id="resultMap">
+		<id column="id" property="id" />
+		<id column="uniqueCode" property="uniqueCode" />
+		<id column="name" property="name" />
+		<id column="resourceType" property="resourceType" />
+		<id column="url" property="url" />
+		<id column="permission" property="permission" />
+		<id column="parentId" property="parentId" />
+		<id column="parentCode" property="parentCode" />
+		<id column="isDelete" property="isDelete" />
+		<id column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 表基本字段 -->
+	<sql id="tableColumns">
+		p.id,
+		p.unique_code uniqueCode,
+		p.name,
+		p.resource_type resourceType,
+		p.url,
+		p.permission,
+		p.parent_id parentId,
+		p.parent_code parentCode,
+		p.is_delete isDelete,
+		DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')createTime
+	</sql>
+	
+	
+	<!-- 分页查询 -->
+	<select id="pageList" parameterType="map" resultMap="resultMap">
+		SELECT
+			<include refid="tableColumns" />
+			FROM user_permission p
+		WHERE p.is_delete = 0
+		<if test="key != null and key != ''">
+			AND (p.name like concat('%',#{key},'%')
+				OR 
+				 p.url like concat('%',#{key},'%')
+				OR
+				 p.permission like concat('%',#{key},'%')
+				OR
+			     p.unique_code like concat('%',#{key},'%')
+			    OR
+			     p.parent_code like concat('%',#{key},'%'))
+		</if>
+	</select>
+	
+	
+	<!-- 删除角色权限 -->
+	<delete id="delPermissions">
+		DELETE 
+			FROM user_role_permission
+		WHERE role_id = #{roleId}
+	</delete>
+	
+	
+	<!-- 批量设置角色权限 -->
+	<insert id="setPermissions">
+		INSERT INTO 
+			user_role_permission(
+				role_id,
+				permission_id
+			) VALUES
+			<foreach collection="ids" item="id" index="index" separator=",">
+				(#{roleId},#{id})
+			</foreach>
+	</insert>
+	
+	
+	<!-- 通过URL获取资源权限 -->
+	<select id="getByUrl" resultMap="resultMap">
+		SELECT
+			<include refid="tableColumns" />
+			FROM user_permission p
+		WHERE p.url = #{url}
+	</select>
+	
+	
+	<!-- 通过URL获取资源权限 -->
+	<select id="getByPermission" resultMap="resultMap">
+		SELECT
+			<include refid="tableColumns" />
+			FROM user_permission p
+		WHERE p.permission = #{permission}
+	</select>
+	
+	
+	<!-- 通过唯一标识获取资源权限 -->
+	<select id="getByUniqueCode" resultMap="resultMap">
+		SELECT
+			<include refid="tableColumns" />
+			FROM user_permission p
+		WHERE p.unique_code = #{uniqueCode}
+	</select>
+	
+	
+	<!-- 添加权限资源 -->
+	<insert id="synch" parameterType="RolePermission" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+			user_permission(
+				unique_code,
+				name,
+				resource_type,
+				url,
+				permission
+				<if test="parentId != null">
+					,parent_id
+				</if>
+				<if test="parentCode != null and parentCode != ''">
+					,parent_code
+				</if>
+			)VALUES(
+				#{uniqueCode},
+				#{name},
+				#{resourceType},
+				#{url},
+				#{permission}
+				<if test="parentId != null">
+					,#{parentId}
+				</if>
+				<if test="parentCode != null and parentCode != ''">
+					,#{parentCode}
+				</if>
+			)
+	</insert>
+	
+	<!-- 删除权限资源 -->
+	<delete id="delByPrimaryKey">
+		DELETE 
+			FROM user_permission
+		WHERE id = #{id}
+	</delete>
+	
+	<!-- 删除角色资源关联关系 -->
+	<delete id="delRolePermission">
+		DELETE
+			FROM user_role_permission
+		WHERE id = #{permissionId}
+	</delete>
+</mapper>

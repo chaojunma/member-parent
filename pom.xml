@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- 基本信息 -->
+	<modelVersion>4.0.0</modelVersion>
+	<name>member-parent</name>
+	<packaging>pom</packaging>
+
+	<!-- 项目说明：这里作为聚合工程的父工程 -->
+	<groupId>cn.cebest</groupId>
+	<artifactId>member-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<!-- 模块说明：这里声明多个子模块 -->
+	<modules>
+		<module>member-web</module>
+		<module>member-service</module>
+		<module>member-dao</module>
+    <module>member-common</module>
+    <module>member-config</module>
+  </modules>
+
+
+	<!-- 继承说明：这里继承SpringBoot提供的父工程 -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.7.RELEASE</version>
+	</parent>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- web网站(jsp)需要加入以下依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- aop依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<!-- mybatis依赖 -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!-- mybatis分页插件依赖 -->
+		<dependency>
+	        <groupId>com.github.pagehelper</groupId>
+	        <artifactId>pagehelper</artifactId>
+	        <version>3.7.5</version>
+       	</dependency>
+       	<!-- poi依赖 -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.16</version>
+		</dependency>
+		<!-- 开启热启动 -->
+		<!-- <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-devtools</artifactId>
+	        <optional>true</optional>
+	    </dependency> -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- 安全框架shiro依赖 -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>  
+	      <groupId>commons-lang</groupId>  
+	      <artifactId>commons-lang</artifactId>  
+	      <version>2.6</version>  
+	    </dependency>
+	    <!-- 配置使用redis启动器 -->
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+            <version>2.4.2.1-RELEASE</version>
+        </dependency>
+	</dependencies>
+	
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>utf8</encoding>
+					<!--fork :  如果没有该项配置则devtools不会起作用，即应用不会restart -->
+					<!-- <fork>true</fork> -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<!-- 打包时跳过测试 -->
+		<skipTests>true</skipTests>
+	</properties>
+</project>

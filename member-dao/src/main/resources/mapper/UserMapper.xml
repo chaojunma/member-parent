@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cebest.mapper.UserMapper">
+	
+	<resultMap type="UserInfo" id="userResultMap">
+		<id column="id" property="id"/>
+		<id column="nickName" property="nickName"/>
+		<id column="realName" property="realName"/>
+		<id column="phone" property="phone"/>
+		<id column="password" property="password"/>
+		<id column="photo" property="photo"/>
+		<id column="age" property="age"/>
+		<id column="sex" property="sex"/>
+		<id column="state" property="state"/>
+		<id column="isDelete" property="isDelete"/>
+		<id column="createTime" property="createTime"/>
+		<collection property="roleList" ofType="cn.cebest.entity.UserRole">
+			<id column="roleId" property="id" />
+			<result column="roleCode" property="roleCode" />
+			<result column="description" property="description" />
+			<collection property="permissions" ofType="cn.cebest.entity.RolePermission">
+				<id column="permissionId" property="id" />
+				<result column="name" property="name" />
+				<result column="resourceType" property="resourceType" />
+				<result column="url" property="url" />
+				<result column="permission" property="permission" />
+				<result column="parentId" property="parentId" />
+			</collection>
+		</collection>
+	</resultMap>
+
+	<sql id="tableColumns">
+		u.id,
+		u.nick_name nickName,
+		u.real_name realName,
+		u.phone,
+		u.password,
+		u.photo,
+		u.age,
+		u.sex,
+		u.state,
+		u.is_delete isDetete,
+		DATE_FORMAT(u.create_time,'%Y-%m-%d %H:%i:%s')createTime
+	</sql>
+
+
+	<!-- 通过手机号获取用户信息 -->
+	<select id="findByPhone" resultMap="userResultMap">
+		SELECT
+			<include refid="tableColumns" />
+			,r.id roleId
+			,r.role_code roleCode
+			,r.description
+			,p.id permissionId
+			,p.name
+			,p.resource_type resourceType
+			,p.url
+			,permission
+			,p.parent_id parentId
+			FROM user_info u
+			LEFT JOIN user_info_role ir ON u.id = ir.user_id AND ir.is_delete = 0
+			LEFT JOIN user_role r ON ir.role_id = r.id AND r.is_delete = 0
+			LEFT JOIN user_role_permission rp ON r.id = rp.role_id AND rp.is_delete = 0
+			LEFT JOIN user_permission p ON rp.permission_id = p.id AND p.is_delete = 0
+		WHERE u.phone = #{phone} 
+			AND u.is_delete = 0
+	</select>
+	
+	
+	<!-- 用户分页查询 -->
+	<select id="pageList" parameterType="UserListParam" resultMap="userResultMap">
+		SELECT 
+			<include refid="tableColumns" />
+			,r.id roleId
+			,r.role_code roleCode
+			,r.description
+		FROM user_info u
+		LEFT JOIN user_info_role ir ON u.id = ir.user_id AND ir.is_delete = 0
+			LEFT JOIN user_role r ON ir.role_id = r.id AND r.is_delete = 0
+		<if test="key != null and key != ''">
+			WHERE nick_name like concat('%',#{key},'%')
+				OR 
+				  real_name like concat('%',#{key},'%')
+		</if>
+		ORDER BY u.create_time DESC
+	</select>
+	
+	<!-- 保存用户信息 -->
+	<insert id="synch" parameterType="UserSynchParam" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+			user_info (
+				phone,
+				password
+				<if test="nickName != null and nickName != ''">
+					,nick_name
+				</if>
+				<if test="realName != null and realName != ''">
+					,real_name
+				</if>
+				<if test="photo != null and photo != ''">
+					,photo
+				</if>
+				<if test="age != null">
+					,age
+				</if>
+				<if test="sex != null">
+					,sex
+				</if>
+			) VALUES (
+				#{phone},
+				#{password}
+				<if test="nickName != null and nickName != ''">
+					,#{nickName}
+				</if>
+				<if test="realName != null and realName != ''">
+					,#{realName}
+				</if>
+				<if test="photo != null and photo != ''">
+					,#{photo}
+				</if>
+				<if test="age != null">
+					,#{age}
+				</if>
+				<if test="sex != null">
+					,#{sex}
+				</if>
+			)
+	</insert>
+	
+	
+	<!-- 通过用户ID获取用户信息 -->
+	<select id="detail" resultMap="userResultMap">
+		SELECT
+			<include refid="tableColumns" />
+			,r.id roleId
+			,r.role_code roleCode
+			,r.description
+			,p.id permissionId
+			,p.name
+			,p.resource_type resourceType
+			,p.url
+			,permission
+			,p.parent_id parentId
+			FROM user_info u
+			LEFT JOIN user_info_role ir ON u.id = ir.user_id AND ir.is_delete = 0
+			LEFT JOIN user_role r ON ir.role_id = r.id AND r.is_delete = 0
+			LEFT JOIN user_role_permission rp ON r.id = rp.role_id AND rp.is_delete = 0
+			LEFT JOIN user_permission p ON rp.permission_id = p.id AND p.is_delete = 0
+		WHERE u.id = #{id} 
+			AND u.is_delete = 0
+	</select>
+	
+	<!-- 修改用户信息 -->
+	<update id="update" parameterType="map">
+		UPDATE user_info
+			SET id = id
+			<if test="nickName != null and nickName != ''">
+				,nick_name = #{nickName}
+			</if>
+			<if test="realName != null and realName != ''">
+				,real_name = #{realName}
+			</if>
+			<if test="photo != null and photo != ''">
+				,photo = #{photo}
+			</if>
+			<if test="age != null and age != ''">
+				,age = #{age}
+			</if>
+			<if test="sex != null and sex != ''">
+				,sex = #{sex}
+			</if>
+		WHERE id = #{id}
+	</update>
+
+	<!-- 根据用户ID删除用户 -->
+	<delete id="delete">
+		DELETE
+			FROM user_info
+		WHERE id = #{id}
+	</delete>
+	
+	
+	<!-- 设置用户状态 1正常 2锁定 -->
+	<update id="updateState">
+		UPDATE user_info
+			SET state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 重置密码 -->
+	<update id="resetPwd" parameterType="map">
+		UPDATE user_info
+			SET password = #{password}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 设置用户角色 -->
+	<insert id="setUserRoles">
+		INSERT INTO 
+			user_info_role(
+				user_id,
+				role_id
+			) VALUES
+			<foreach collection="roleIds" item="roleId" index="index" separator=",">
+				(#{userId},#{roleId})
+			</foreach>
+	</insert>
+	
+	<!-- 删除用户角色 -->
+	<delete id="delUserRoles">
+		DELETE 
+			FROM user_info_role
+		WHERE user_id = #{userId}
+	</delete>
+</mapper>
