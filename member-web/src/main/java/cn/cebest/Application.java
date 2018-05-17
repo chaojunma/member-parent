@@ -2,6 +2,8 @@ package cn.cebest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import cn.cebest.util.AppContextUtil;
 
 /**
  * springboot启动类
@@ -12,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+		// 设置spring上下文
+		AppContextUtil.setApplicationContext(applicationContext);
 	}
 }

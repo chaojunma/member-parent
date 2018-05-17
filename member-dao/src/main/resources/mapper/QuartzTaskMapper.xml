@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cebest.mapper.QuartzTaskMapper">
+	
+	<resultMap type="QuartzTask" id="resultMap">
+		<id column="id" property="id" />
+		<id column="name" property="name" />
+		<id column="cron" property="cron" />
+		<id column="targetBean" property="targetBean" />
+		<id column="targetMethod" property="targetMethod" />
+		<id column="params" property="params" />
+		<id column="status" property="status" />
+		<id column="createTime" property="createTime" />
+		<id column="createBy" property="createBy" />
+		<id column="updateTime" property="updateTime" />
+		<id column="updateBy" property="updateBy" />
+		<id column="remarks" property="remarks" />
+		<id column="isDelete" property="isDelete" />
+	</resultMap>
+	
+	<!-- 表基本字段 -->
+	<sql id="tableColumns">
+		qt.id,
+		qt.name,
+		qt.cron,
+		qt.target_bean targetBean,
+		qt.target_method targetMethod,
+		qt.params,
+		qt.status,
+		DATE_FORMAT(qt.create_date,'%Y-%m-%d %H:%i:%s')createTime,
+		qt.create_by createBy,
+		DATE_FORMAT(qt.update_date,'%Y-%m-%d %H:%i:%s')createTime,
+		qt.update_by updateBy,
+		qt.remarks,
+		qt.is_delete isDelete
+	</sql>
+	
+	
+	<!-- 分页查询 -->
+	<select id="pageList" resultMap="resultMap">
+		SELECT 
+			<include refid="tableColumns" />
+		FROM
+			quartz_task qt
+		WHERE 
+			qt.is_delete = 0
+	</select>
+	
+	
+	<!-- 查询详情 -->
+	<select id="queryObject" resultType="QuartzTask">
+		SELECT 
+			<include refid="tableColumns" />
+		FROM
+			quartz_task qt
+		WHERE 
+			qt.id = #{jobId}
+			AND 
+			qt.is_delete = 0
+	</select>
+	
+</mapper>
