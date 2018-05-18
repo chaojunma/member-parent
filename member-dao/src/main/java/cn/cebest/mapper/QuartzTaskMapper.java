@@ -19,4 +19,9 @@ public interface QuartzTaskMapper {
      * 分页查询定时任务列表
      */
 	public List<T> pageList(Map<String, Object> param);
+	
+	/**
+     * 编辑定时任务
+     */
+    public int updateById(QuartzTask quartzTask);
 }

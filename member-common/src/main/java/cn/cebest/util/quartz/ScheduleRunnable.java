@@ -37,6 +37,7 @@ public class ScheduleRunnable implements Runnable {
 	@Override
 	public void run() {
 		try {
+			// 设置方法可访问
 			ReflectionUtils.makeAccessible(method);
 			if(StringUtils.isNotBlank(params)){
 				method.invoke(target, params);

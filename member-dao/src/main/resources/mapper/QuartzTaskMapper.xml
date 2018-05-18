@@ -30,7 +30,7 @@
 		qt.status,
 		DATE_FORMAT(qt.create_date,'%Y-%m-%d %H:%i:%s')createTime,
 		qt.create_by createBy,
-		DATE_FORMAT(qt.update_date,'%Y-%m-%d %H:%i:%s')createTime,
+		DATE_FORMAT(qt.update_date,'%Y-%m-%d %H:%i:%s')updateTime,
 		qt.update_by updateBy,
 		qt.remarks,
 		qt.is_delete isDelete
@@ -45,6 +45,18 @@
 			quartz_task qt
 		WHERE 
 			qt.is_delete = 0
+		<if test="key != null and key != ''">
+			AND (
+				qt.name like concat ('%',#{key},'%')
+				OR
+				qt.target_bean like concat ('%',#{key},'%')
+				OR
+				qt.target_method like concat ('%',#{key},'%')
+			)
+		</if>
+		<if test="status != null and status != -1">
+			AND qt.status = #{status}
+		</if>
 	</select>
 	
 	
@@ -59,5 +71,37 @@
 			AND 
 			qt.is_delete = 0
 	</select>
+	
+	
+	<update id="updateById" parameterType="QuartzTask">
+		UPDATE
+			quartz_task
+		SET 
+			update_date = now()
+		<if test="name != null and name != ''">
+			,name = #{name}
+		</if>
+		<if test="cron != null and cron != ''">
+			,cron = #{cron}
+		</if>
+		<if test="targetBean != null and targetBean != ''">
+			,target_bean = #{targetBean}
+		</if>
+		<if test="targetMethod != null and targetMethod != ''">
+			,target_method = #{targetMethod}
+		</if>
+		<if test="params != null and params != ''">
+			,params = #{params}
+		</if>
+		<if test="status != null">
+			,status = #{status}
+		</if>
+		<if test="remarks != null and remarks != ''">
+			,remarks = #{remarks}
+		</if>
+		<if test="updateBy != null">
+			,update_by = #{updateBy}
+		</if>
+	</update>
 	
 </mapper>

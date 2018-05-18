@@ -22,4 +22,9 @@ public interface QuartzTaskService {
      * 分页查询定时任务列表
      */
     PageInfo<T> pageList(Map<String, Object> param);
+    
+    /**
+     * 编辑定时任务
+     */
+    public void updateQuartzTask(QuartzTask quartzTask);
 }

@@ -66,4 +66,14 @@ public class QuartzTaskServiceImpl implements QuartzTaskService{
 		return pageInfo;
 	}
 
+
+	/**
+     * 编辑定时任务
+     */
+	@Override
+	public void updateQuartzTask(QuartzTask quartzTask) {
+		quartzTaskMapper.updateById(quartzTask);
+	    ScheduleUtils.updateScheduleJob(scheduler,quartzTask);
+	}
+
 }

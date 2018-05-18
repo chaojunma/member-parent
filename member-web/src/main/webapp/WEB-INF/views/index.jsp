@@ -62,6 +62,12 @@
                     <li><a href="permission_list" target="menuFrame"><i class="glyph-icon icon-chevron-right"></i>资源列表</a></li>
                 </ul>
             </li>
+            <li class="childUlLi">
+                <a href="#"> <i class="icon-keyboard glyph-icon"></i>任务管理</a>
+                <ul>
+                    <li><a href="task_list" target="menuFrame"><i class="glyph-icon icon-chevron-right"></i>任务列表</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
     <!--菜单-->
