@@ -1,5 +1,6 @@
 package cn.cebest.controller;
 
+import java.util.List;
 import java.util.Map;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +72,40 @@ public class QuartzTaskController extends BaseController{
 			return new Result(ResultCode.SERVER_ERROR);
 		}
 	}
+	
+	
+	/**
+	 * 批量停止定时任务
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value="/paush", method=RequestMethod.POST)
+	@ResponseBody
+    public Result paush(@RequestParam(value = "ids[]",required = false)List<Long> ids){
+        try {
+			quartzTaskService.paush(ids);
+			return new Result();
+		} catch (Exception e) {
+			log.error("停止定时任务异常", e);
+			return new Result(ResultCode.SERVER_ERROR);
+		}
+    }
+	
+	
+	/**
+	 * 批量启动定时任务
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value="/resume", method=RequestMethod.POST)
+	@ResponseBody
+    public Result resume(@RequestParam(value = "ids[]",required = false)List<Long> ids){
+        try {
+			quartzTaskService.resume(ids);
+			return new Result();
+		} catch (Exception e) {
+			log.error("启动定时任务异常", e);
+			return new Result(ResultCode.SERVER_ERROR);
+		}
+    }
 }

@@ -25,7 +25,7 @@
 	<td>{createTime}</td>
 	<td>
 		<a href="/task/{id}">编辑</a>
-		<a href="javascript:warning({id});">暂停</a>
+		{status}
 		<a href="javascript:warning({id});">立即执行</a>
 	</td>
 </tr>
@@ -113,20 +113,48 @@
 	
 	
 	// 删除提醒
-	function warning(resourceId){
+	function warning(taskId){
 		layui.use('layer', function(){
-			layer.confirm('确认删除?',{
+			layer.confirm('确认暂停?',{
 				icon: 3, 
 				title:'提示',
 				btnAlign: 'c',
 				yes: function(index){
 					 layer.close(index);
-					 delPermission(resourceId);
+					 paush(taskId);
 				}
 			})
 		});
 	}
 	
+	
+	// 暂停任务
+	function paush(taskId){
+		$.post("/task/paush",{"ids":[taskId]},
+			function (data){
+	            if(data.code == 200){
+	                layer.msg("暂停成功",{time: 200},function(){
+	                    location.reload();
+	                });
+	            }else{
+	                layer.msg(data.message);
+	            }
+        });
+	}
+	
+	// 启动任务
+	function resume(taskId){
+		$.post("/task/resume",{"ids":[taskId]},
+			function (data){
+	            if(data.code == 200){
+	                layer.msg("启动成功",{time: 200},function(){
+	                    location.reload();
+	                });
+	            }else{
+	                layer.msg(data.message);
+	            }
+        });
+	}
 	
 	
 	$(function() {
@@ -176,9 +204,10 @@
 				$("#taskList").empty();
 				if (totalCount > 0) { // 有数据
 					var items = data.data;
-					var arr = new Array("reg_id","name", "cron", "targetBean", "targetMethod","status", "remarks", "createTime");
+					var arr = new Array("reg_id","name", "cron", "targetBean", "targetMethod","status", "remarks", "createTime", "status");
 					// 注意:需要特殊处理的字段绑定回调函数
 					$.helper("status", funA);
+					$.helper("status", funB);
 					for (var i = 0; i < items.length; i++) {
 						// 判断是否是最后一条
 						var last = i == items.length-1 ? true : false;
@@ -197,6 +226,15 @@
 			return "正常";
 		} else {
 			return "暂停";
+		}
+	}
+	
+	
+	function funB(cellData, rowData) {
+		if (cellData == 0) {
+			return "<a href='javascript:warning(" + rowData.id + ");'>暂停</a>";
+		} else {
+			return "<a href='javascript:resume(" + rowData.id + ");'>开启</a>";
 		}
 	}
 

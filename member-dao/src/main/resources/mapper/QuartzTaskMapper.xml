@@ -72,7 +72,7 @@
 			qt.is_delete = 0
 	</select>
 	
-	
+	<!-- 更新定时任务 -->
 	<update id="updateById" parameterType="QuartzTask">
 		UPDATE
 			quartz_task
@@ -102,6 +102,19 @@
 		<if test="updateBy != null">
 			,update_by = #{updateBy}
 		</if>
+	</update>
+	
+	<!-- 批量更新任务状态 -->
+	<update id="updateBatchTasksStatus">
+		UPDATE
+			quartz_task
+		SET
+			status = #{status}
+		WHERE
+			id IN 
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
 	</update>
 	
 </mapper>

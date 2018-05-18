@@ -1,5 +1,6 @@
 package cn.cebest.service;
 
+import java.util.List;
 import java.util.Map;
 import org.apache.poi.ss.formula.functions.T;
 import com.github.pagehelper.PageInfo;
@@ -27,4 +28,24 @@ public interface QuartzTaskService {
      * 编辑定时任务
      */
     public void updateQuartzTask(QuartzTask quartzTask);
+    
+    /**
+     * 批量更新定时任务状态
+     */
+    int updateBatchTasksStatus(List<Long> ids,Integer status);
+
+    /**
+     * 立即执行
+     */
+    void run(List<Long> jobIds);
+
+    /**
+     * 暂停运行
+     */
+    void paush(List<Long> jobIds);
+
+    /**
+     * 恢复运行
+     */
+    void resume(List<Long> jobIds);
 }

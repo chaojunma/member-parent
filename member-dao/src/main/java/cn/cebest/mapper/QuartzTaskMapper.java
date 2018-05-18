@@ -24,4 +24,10 @@ public interface QuartzTaskMapper {
      * 编辑定时任务
      */
     public int updateById(QuartzTask quartzTask);
+    
+    /**
+     * 批量更新定时任务状态
+     */
+    public int updateBatchTasksStatus(@Param("ids")List<Long> ids, @Param("status")Integer status) ;
+    
 }
