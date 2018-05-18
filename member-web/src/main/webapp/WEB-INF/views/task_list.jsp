@@ -26,7 +26,7 @@
 	<td>
 		<a href="/task/{id}">编辑</a>
 		{status}
-		<a href="javascript:warning({id});">立即执行</a>
+		<a href="javascript:run({id});">立即执行</a>
 	</td>
 </tr>
 </template>
@@ -148,6 +148,21 @@
 			function (data){
 	            if(data.code == 200){
 	                layer.msg("启动成功",{time: 200},function(){
+	                    location.reload();
+	                });
+	            }else{
+	                layer.msg(data.message);
+	            }
+        });
+	}
+	
+	
+	// 立即执行任务
+	function run(taskId){
+		$.post("/task/run",{"ids":[taskId]},
+			function (data){
+	            if(data.code == 200){
+	                layer.msg("执行成功",{time: 200},function(){
 	                    location.reload();
 	                });
 	            }else{

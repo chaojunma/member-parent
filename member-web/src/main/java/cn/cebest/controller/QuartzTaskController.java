@@ -108,4 +108,22 @@ public class QuartzTaskController extends BaseController{
 			return new Result(ResultCode.SERVER_ERROR);
 		}
     }
+	
+	
+	/**
+	 * 立即启动定时任务
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value="/run", method=RequestMethod.POST)
+	@ResponseBody
+    public Result run(@RequestParam(value = "ids[]",required = false)List<Long> ids){
+        try {
+			quartzTaskService.run(ids);
+			return new Result();
+		} catch (Exception e) {
+			log.error("立即启动定时任务异常", e);
+			return new Result(ResultCode.SERVER_ERROR);
+		}
+    }
 }
