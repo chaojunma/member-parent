@@ -48,4 +48,9 @@ public interface QuartzTaskService {
      * 恢复运行
      */
     void resume(List<Long> jobIds);
+    
+    /**
+     * 保存定时任务
+     */
+    void saveQuartzTask(QuartzTask quartzTask);
 }

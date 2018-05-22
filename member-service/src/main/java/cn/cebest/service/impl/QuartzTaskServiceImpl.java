@@ -114,4 +114,13 @@ public class QuartzTaskServiceImpl implements QuartzTaskService {
 		updateBatchTasksStatus(jobIds, Constants.QUARTZ_STATUS_NOMAL);
 	}
 
+	/**
+     * 保存定时任务
+     */
+	@Override
+	public void saveQuartzTask(QuartzTask quartzTask) {
+		quartzTaskMapper.insert(quartzTask);
+		ScheduleUtils.createScheduleJob(scheduler, quartzTask);
+	}
+
 }

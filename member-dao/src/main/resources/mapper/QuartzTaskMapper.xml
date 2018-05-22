@@ -117,4 +117,38 @@
 		</foreach>
 	</update>
 	
+	<!-- 添加定时任务 -->
+	<insert id="insert" parameterType="QuartzTask" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+			quartz_task(
+				name,
+				cron,
+				target_bean,
+				target_method
+				<if test="params != null and params != ''">
+					,params
+				</if>
+				<if test="status != null">
+					,status
+				</if>
+				<if test="create_by != null and create_by != ''">
+					,create_by
+				</if>
+			)VALUES(
+				#{name},
+				#{cron},
+				#{targetBean},
+				#{targetMethod}
+				<if test="params != null and params != ''">
+					,#{params}
+				</if>
+				<if test="status != null">
+					,#{status}
+				</if>
+				<if test="create_by != null and create_by != ''">
+					,#{createBy}
+				</if>
+			)
+	</insert>
+	
 </mapper>

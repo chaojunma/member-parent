@@ -126,4 +126,22 @@ public class QuartzTaskController extends BaseController{
 			return new Result(ResultCode.SERVER_ERROR);
 		}
     }
+	
+	
+	/**
+	 * 添加定时任务
+	 * @return
+	 */
+	@RequestMapping(value="/synch", method=RequestMethod.POST)
+	@ResponseBody
+	public Result synch(QuartzTask quartzTask){
+		try {
+			quartzTask.setCreateBy(currentUser.getId());
+			quartzTaskService.saveQuartzTask(quartzTask);
+			return new Result();
+		} catch (Exception e) {
+			log.error("添加定时任务异常", e);
+			return new Result(ResultCode.SERVER_ERROR);
+		}
+	}
 }
