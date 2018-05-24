@@ -131,8 +131,11 @@
 				<if test="status != null">
 					,status
 				</if>
-				<if test="create_by != null and create_by != ''">
+				<if test="createBy != null and createBy != ''">
 					,create_by
+				</if>
+				<if test="remarks != null and remarks != ''">
+					,remarks
 				</if>
 			)VALUES(
 				#{name},
@@ -145,8 +148,11 @@
 				<if test="status != null">
 					,#{status}
 				</if>
-				<if test="create_by != null and create_by != ''">
+				<if test="createBy != null and createBy != ''">
 					,#{createBy}
+				</if>
+				<if test="remarks != null and remarks != ''">
+					,#{remarks}
 				</if>
 			)
 	</insert>

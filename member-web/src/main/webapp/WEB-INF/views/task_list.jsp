@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -61,7 +62,11 @@
 					<span style="margin-left: 20px;">
 						<button type="button" class="btn btn-primary"
 							onclick="initData(1)">查询</button>
-						<button type="button" id="add" class="btn  btn-success">新增</button>
+						<shiro:hasPermission name="task:add">
+							<a href="/task_add">
+								<button type="button" id="add" class="btn  btn-success">新增</button>
+							</a>
+						</shiro:hasPermission>
 					</span>
 				</div>
 				<hr>

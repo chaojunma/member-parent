@@ -2,7 +2,7 @@ package cn.cebest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+//import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ApplicationContext;
 import cn.cebest.util.AppContextUtil;
 
@@ -11,7 +11,7 @@ import cn.cebest.util.AppContextUtil;
  * @author maming
  * @date 2018年4月19日
  */
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class Application {
 
