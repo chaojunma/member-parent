@@ -16,8 +16,7 @@
 		<module>member-web</module>
 		<module>member-service</module>
 		<module>member-dao</module>
-    <module>member-common</module>
-    <module>member-config</module>
+	    <module>member-common</module>
   </modules>
 
 
